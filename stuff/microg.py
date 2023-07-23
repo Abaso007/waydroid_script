@@ -107,7 +107,7 @@ service microg_service /system/bin/sh /system/bin/npem
         super().__init__()
         self.dl_link = self.dl_links[variant][0]
         self.act_md5 = self.dl_links[variant][1]
-        self.id = self.id+f"-{variant}"
+        self.id = f"{self.id}-{variant}"
         self.dl_file_name = f'MinMicroG-{variant}.zip'
         if android_version == "11":
             self.sdk = 30
@@ -118,11 +118,8 @@ service microg_service /system/bin/sh /system/bin/npem
         Logger.info("Copying libs and apks...")
         dst_dir = os.path.join(self.copy_dir, self.partition)
         src_dir = os.path.join(self.extract_to, "system")
-        if "arm" in self.arch[0]:
-            sub_arch = "arm"
-        else:
-            sub_arch = "x86"
-        if 64 == self.arch[1]:
+        sub_arch = "arm" if "arm" in self.arch[0] else "x86"
+        if self.arch[1] == 64:
             arch = f"{sub_arch}{'' if sub_arch=='arm' else '_'}64"
         for root, dirs, files in os.walk(src_dir):
             flag = False
@@ -135,7 +132,13 @@ service microg_service /system/bin/sh /system/bin/npem
                         sdks.append(i)
                     elif i:
                         archs.append(i)
-                if len(archs) != 0 and arch not in archs and sub_arch not in archs or len(sdks) != 0 and str(self.sdk) not in sdks:
+                if (
+                    archs
+                    and arch not in archs
+                    and sub_arch not in archs
+                    or sdks
+                    and str(self.sdk) not in sdks
+                ):
                     continue
                 else:
                     flag = True

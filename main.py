@@ -30,21 +30,21 @@ def get_certified(args):
 
 
 def mount(partition, copy_dir):
-    img = os.path.join(images.get_image_dir(), partition+".img")
+    img = os.path.join(images.get_image_dir(), f"{partition}.img")
     mount_point = ""
     if partition == "system":
         mount_point = os.path.join(copy_dir)
     else:
         mount_point = os.path.join(copy_dir, partition)
-    Logger.info("Mounting {} to {}".format(img, mount_point))
+    Logger.info(f"Mounting {img} to {mount_point}")
     images.mount(img, mount_point)
 
 
 def resize(partition):
-    img = os.path.join(images.get_image_dir(), partition+".img")
+    img = os.path.join(images.get_image_dir(), f"{partition}.img")
     img_size = int(os.path.getsize(img)/(1024*1024))
-    new_size = "{}M".format(img_size+500)
-    Logger.info("Resizing {} to {}".format(img, new_size))
+    new_size = f"{img_size + 500}M"
+    Logger.info(f"Resizing {img} to {new_size}")
     images.resize(img, new_size)
 
 
@@ -54,7 +54,7 @@ def umount(partition, copy_dir):
         mount_point = os.path.join(copy_dir)
     else:
         mount_point = os.path.join(copy_dir, partition)
-    Logger.info("Umounting {}".format(mount_point))
+    Logger.info(f"Umounting {mount_point}")
     images.umount(mount_point)
 
 
@@ -312,7 +312,8 @@ widevine: Add support for widevine DRM L3
     install_parser = subparsers.add_parser(
         'install', formatter_class=argparse.RawTextHelpFormatter, help='Install an app')
     install_parser.add_argument(
-        **arg_template, choices=install_choices, help=install_help)
+        **arg_template, choices=remove_choices, help=install_help
+    )
     install_parser.set_defaults(func=install_app)
 
     # remove and its aliases

@@ -35,7 +35,7 @@ class Nodataperm(General):
         if not container.use_overlayfs():
             services_jar = os.path.join(
                 self.copy_dir, self.partition, "framework", "services.jar")
-            gz_filename = services_jar+".gz"
+            gz_filename = f"{services_jar}.gz"
             with gzip.open(gz_filename, 'wb') as f_gz:
                 with open(services_jar, "rb") as f:
                     f_gz.write(f.read())
@@ -47,7 +47,7 @@ class Nodataperm(General):
         if not container.use_overlayfs():
             services_jar = os.path.join(
                 self.copy_dir, self.partition, "framework", "services.jar")
-            gz_filename = services_jar+".gz"
+            gz_filename = f"{services_jar}.gz"
             with gzip.GzipFile(gz_filename) as f_gz:
                 with open(services_jar, "wb") as f:
                     f.writelines(f_gz)

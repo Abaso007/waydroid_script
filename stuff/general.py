@@ -32,8 +32,9 @@ class General:
             return "/tmp/waydroid"
 
     def download(self):
-        Logger.info("Downloading {} now to {} .....".format(
-            self.dl_file_name, self.download_loc))
+        Logger.info(
+            f"Downloading {self.dl_file_name} now to {self.download_loc} ....."
+        )
         loc_md5 = ""
         if os.path.isfile(self.download_loc):
             with open(self.download_loc, "rb") as f:
@@ -55,11 +56,10 @@ class General:
                         shutil.rmtree(wildcard_file)
                     elif os.path.isfile(wildcard_file):
                         os.remove(wildcard_file)
-            else:
-                if os.path.isdir(file):
-                    shutil.rmtree(file)
-                elif os.path.isfile(file):
-                    os.remove(file)
+            elif os.path.isdir(file):
+                shutil.rmtree(file)
+            elif os.path.isfile(file):
+                os.remove(file)
 
     def extract(self):
         Logger.info(f"Extracting {self.download_loc} to {self.extract_to}")
@@ -114,11 +114,11 @@ class General:
                         shutil.copyfileobj(src_file, dest_file)
 
     def set_path_perm(self, path):
-        if "bin" in path.split("/"):
-            perms = [0, 2000, 0o755, 0o777]
-        else:
-            perms = [0, 0, 0o755, 0o644]
-
+        perms = (
+            [0, 2000, 0o755, 0o777]
+            if "bin" in path.split("/")
+            else [0, 0, 0o755, 0o644]
+        )
         mode = os.stat(path).st_mode
 
         if os.path.isdir(path):
