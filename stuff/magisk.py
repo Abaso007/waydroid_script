@@ -58,7 +58,7 @@ on property:init.svc.zygote=stopped
     def download(self):
         if os.path.isfile(self.download_loc):
             os.remove(self.download_loc)
-        Logger.info("Downloading latest Magisk-Delta to {} now ...".format(self.download_loc))
+        Logger.info(f"Downloading latest Magisk-Delta to {self.download_loc} now ...")
         download_file(self.dl_link, self.download_loc)
 
     # require additional setup
@@ -77,13 +77,13 @@ on property:init.svc.zygote=stopped
             os.makedirs(os.path.join(self.copy_dir, "sbin"), exist_ok=True)
 
         Logger.info("Copying magisk libs now ...")
-        
+
         lib_dir = os.path.join(self.extract_to, "lib", self.arch[0])
         for parent, dirnames, filenames in os.walk(lib_dir):
             for filename in filenames:
-                o_path = os.path.join(lib_dir, filename)  
+                o_path = os.path.join(lib_dir, filename)
                 filename = re.search('lib(.*)\.so', filename)
-                n_path = os.path.join(magisk_absolute_dir, filename.group(1))
+                n_path = os.path.join(magisk_absolute_dir, filename[1])
                 shutil.copyfile(o_path, n_path)
         shutil.copyfile(self.download_loc, os.path.join(magisk_absolute_dir,"magisk.apk") )
         shutil.copytree(os.path.join(self.extract_to, "assets", "chromeos"), os.path.join(magisk_absolute_dir, "chromeos"), dirs_exist_ok=True)
@@ -99,7 +99,7 @@ on property:init.svc.zygote=stopped
         # Updating Magisk from Magisk manager will modify bootanim.rc, 
         # So it is necessary to backup the original bootanim.rc.
         bootanim_path = os.path.join(self.copy_dir, self.partition, "etc", "init", "bootanim.rc")
-        gz_filename = os.path.join(bootanim_path)+".gz"
+        gz_filename = f"{os.path.join(bootanim_path)}.gz"
         with gzip.open(gz_filename,'wb') as f_gz:
             f_gz.write(self.oringinal_bootanim.encode('utf-8'))
         with open(bootanim_path, "w") as initfile:

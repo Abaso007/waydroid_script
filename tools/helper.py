@@ -123,8 +123,9 @@ def host():
                     Logger.warning("x86_64 CPU does not support SSE4.2, falling back to x86...")
                     return ("x86", 32)
         return mapping[machine]
-    raise ValueError("platform.machine '" + machine + "'"
-                     " architecture is not supported")
+    raise ValueError(
+        (f"platform.machine '{machine}" + "'" " architecture is not supported")
+    )
 
 
 def check_root():

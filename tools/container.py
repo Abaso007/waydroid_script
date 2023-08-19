@@ -29,9 +29,7 @@ def use_overlayfs():
         Logger.error("Required entry in config was not found, Cannot continue!")
     if "mount_overlays" not in cfg["waydroid"]:
         return False
-    if cfg["waydroid"]["mount_overlays"]=="True":
-        return True
-    return False
+    return cfg["waydroid"]["mount_overlays"] == "True"
 
 
 # def get_session():
